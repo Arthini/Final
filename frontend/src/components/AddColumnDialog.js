@@ -27,7 +27,7 @@ const AddColumnDialog = ({ open, onClose, onSubmit }) => {
     setColumnType('');
   };
   useEffect(()=>{
-    axios.get('http://localhost:3307/api/tables')
+    axios.get('http://localhost:8082/tables')
     .then(res=>console.log(res))
     .catch(err=>console.log(err));
   },[])

@@ -6,7 +6,7 @@ const mysql = require('mysql');
 const cors = require('cors');
 
 const app = express();
-const port = 3307; 
+const port = 8082; 
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -18,16 +18,11 @@ const db = mysql.createConnection({
     database: 'web' 
 });
 
-db.connect(err => {
-    if (err) {
-        console.error('error connecting: ' + err.stack);
-        return;
-    }
-    console.log('connected as id ' + db.threadId);
-});
+
 
 // Route to create a new table
 app.post('/api/tables', (req, res) => {
+  
     const { tableName, columns } = req.body;
     db.query('INSERT INTO tables (name) VALUES (?)', [tableName], (err, result) => {
         if (err) {
@@ -100,12 +95,15 @@ app.put('/api/tables/:id', (req, res) => {
 // Route to delete a table
 app.delete('/api/tables/:id', (req, res) => {
   const tableId = req.params.id;
-  
+  console.log(tableId)
   // Delete the table
   db.query('DELETE FROM tables WHERE id = ?', [tableId], (err, result) => {
       if (err) {
           res.status(500).send('Error deleting table');
           return;
+      }
+      else{
+       res.send(result);
       }
 
       // Delete the associated columns
@@ -116,11 +114,12 @@ app.delete('/api/tables/:id', (req, res) => {
           }
 
           res.status(200).send('Table and associated columns deleted successfully');
+          console.log("Delete reached")
       });
   });
 });
 
 
-app.listen(port, () => {
+app.listen(8082, () => {
     console.log(`Server running on port ${port}`);
 });

@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import axios from 'axios';
 
 const App = () => {
   const [openCreateTableDialog, setOpenCreateTableDialog] = useState(false);
@@ -21,11 +22,13 @@ const App = () => {
   }, []);
 
   const fetchTables = () => {
-    fetch('http://localhost:3307/api/tables')
+    fetch('http://localhost:8082/api/tables')
       .then(response => response.json())
       .then(data => setTables(data))
       .catch(error => console.error("Error fetching tables:", error));
   };
+
+  console.log(tables)
 
   const handleOpenCreateTableDialog = () => {
     setOpenCreateTableDialog(true);
@@ -68,11 +71,10 @@ const App = () => {
     handleCloseAddColumnDialog();
   };
 
-  const handleDeleteTable = (tableIndex) => {
-    const updatedTables = tables.filter((_, index) => index !== tableIndex);
+  const handleDeleteTable = (tableId) => {
+    const updatedTables = tables.filter(table => table.id !== tableId);
     setTables(updatedTables);
   };
-
   const handleOpenTableListDialog = () => {
     setOpenTableListDialog(true);
   };
@@ -94,7 +96,7 @@ const App = () => {
                     <TableRow>
                       <TableCell colSpan={3}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span>{table.tableName}</span>
+                          <span>{table.name}</span>
                           <div>
                             <IconButton onClick={() => handleOpenEditTableDialog(index)}>
                               <EditIcon />
@@ -102,7 +104,7 @@ const App = () => {
                             <IconButton onClick={() => handleOpenAddColumnDialog(index)}>
                               <AddIcon />
                             </IconButton>
-                            <IconButton onClick={() => handleDeleteTable(index)}>
+                            <IconButton onClick={() => handleDeleteTable(table.id)}>
                               <DeleteIcon />
                             </IconButton>
                           </div>

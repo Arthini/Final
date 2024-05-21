@@ -59,7 +59,7 @@ const CreateTableDialog = ({ open, onClose, onSubmit, tableData }) => {
       setErrorOpen(true);
     } else {
       const tableData = { tableName, columns };
-      axios.post('http://localhost:3307/api/tables', tableData) // Send a POST request to create table endpoint
+      axios.post('http://localhost:8082/api/tables', tableData) // Send a POST request to create table endpoint
         .then(response => {
           onSubmit(tableData); // Trigger the onSubmit function to update the state with the new table data
           onClose(); // Close the dialog after successfully creating the table
